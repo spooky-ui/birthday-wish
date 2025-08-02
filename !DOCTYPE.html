@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Birthday Surprise</title>
+  <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+  <style>
+    * { user-select: none; -webkit-user-select: none; }
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      font-family: 'Pacifico', cursive;
+      overflow: hidden;
+      transition: background 1s ease-in-out;
+    }
+
+    body.bg1 {
+      background: url('windy_element_motion.gif') no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    body.bg2 {
+      background: url("ChatGPT Image Jun 15, 2025, 10_21_14 PM.png") no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    body.bg3 {
+      background: url("ChatGPT Image Jun 15, 2025, 10_39_56 PM.png") no-repeat center center fixed;
+      background-size: cover;
+    }
+
+    .name-entry {
+      z-index: 10;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      color: white;
+    }
+
+    .name-entry h1 {
+      font-size: 2.5em;
+      color: skyblue;
+    }
+
+    .name-entry input {
+      padding: 10px;
+      font-size: 1.2em;
+      border-radius: 10px;
+      text-align: center;
+      margin-top: 20px;
+      font-style: italic;
+    }
+
+    .name-entry button {
+      padding: 12px 24px;
+      font-size: 1.3em;
+      margin-top: 20px;
+      background: linear-gradient(135deg, #ffb6c1, #dda0dd);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      cursor: pointer;
+      font-family: 'Pacifico', cursive;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      transition: transform 0.2s ease, background 0.3s ease;
+    }
+
+    .name-entry button:hover {
+      transform: scale(1.05);
+      background: linear-gradient(135deg, #ffc0cb, #da70d6);
+    }
+
+    .celebration {
+      display: none;
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      z-index: 1;
+    }
+
+    .birthday-message {
+      font-size: 3em;
+      color: #ff1493;
+      text-shadow: 2px 2px 5px #000;
+      margin-top: 30px;
+      text-align: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .beautiful-message {
+      font-size: 1.8em;
+      color: #ffd1fa;
+      text-align: center;
+      text-shadow: 1px 1px 4px black;
+      margin-top: 10px;
+    }
+
+    .second-quote {
+      font-size: 1.6em;
+      color: #add8e6;
+      text-align: center;
+      text-shadow: 1px 1px 4px black;
+      margin-top: 10px;
+    }
+
+    .gift-btn {
+      display: none;
+      position: absolute;
+      left: 50%;
+      top: 70%;
+      transform: translate(-50%, -50%);
+      background: linear-gradient(135deg, #ffb6c1, #ff69b4);
+      color: white;
+      padding: 16px 34px;
+      font-size: 1.5em;
+      border: none;
+      border-radius: 50px;
+      font-family: 'Pacifico', cursive;
+      cursor: pointer;
+      z-index: 3;
+      box-shadow: 0 0 20px rgba(255, 182, 193, 0.8);
+    }
+
+    .gift-btn:hover {
+      background: linear-gradient(135deg, #ffc0cb, #da70d6);
+    }
+
+    .candle-btn {
+      display: none;
+      position: absolute;
+      left: 50%;
+      bottom: 80px;
+      transform: translateX(-50%);
+      background: linear-gradient(135deg, #ffa07a, #ff4500);
+      color: white;
+      padding: 14px 32px;
+      font-size: 1.4em;
+      border: none;
+      border-radius: 30px;
+      cursor: pointer;
+      z-index: 3;
+      font-family: 'Pacifico', cursive;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .interactive-image {
+      width: 100px;
+      height: 70px;
+      position: absolute;
+      bottom: 40px;
+      left: 40px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.5);
+      cursor: pointer;
+      display: none;
+      z-index: 3;
+      animation: bounce-in 1s forwards;
+    }
+
+    @keyframes bounce-in {
+      0% {transform: scale(0.5);}
+      60% {transform: scale(1.2);}
+      100% {transform: scale(1); opacity: 1;}
+    }
+
+    .music-btn {
+      position: fixed;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      padding: 15px 30px;
+      background: linear-gradient(135deg, #ff69b4, #8a2be2);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      font-size: 1.2em;
+      font-family: 'Pacifico', cursive;
+      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: all 0.3s ease;
+      z-index: 999;
+    }
+
+    .music-btn:hover {
+      transform: translateX(-50%) scale(1.05);
+      background: linear-gradient(135deg, #ff85c1, #9f40ff);
+    }
+
+    .overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      background-color: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+    }
+
+    .overlay-content {
+      position: relative;
+      background: white;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.7);
+      animation: zoomIn 0.3s ease-out;
+    }
+
+    .overlay-content img {
+      max-width: 90vw;
+      max-height: 85vh;
+      border-radius: 10px;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: -12px;
+      right: -12px;
+      background: crimson;
+      color: white;
+      border: none;
+      font-size: 1.2em;
+      border-radius: 50%;
+      padding: 10px 14px;
+      cursor: pointer;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.5);
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.7); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+.mini-games-button {
+  position: absolute;
+  top: 50%;
+  right: 170px;
+  transform: translateY(-50%);
+  padding: 10px 16px;
+  font-size: 16px;
+  background-color: #ff69b4;
+  color: white;
+  border: none;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+  z-index: 1001;
+}
+
+.game-container {
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  width: 80%;
+  height: 80%;
+  background: white;
+  border: 3px solid #ff69b4;
+  border-radius: 20px;
+  z-index: 1002;
+  padding: 20px;
+  display: flex;
+  background: pink;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.hidden {
+  display: none;
+}
+
+.close-game {
+  position: absolute;
+  top: 7px;
+  right: 40px;
+  background: crimson;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+  font-size: 18px;
+  cursor: pointer;
+}
+
+  </style>
+</head>
+<body class="bg1">
+
+<audio id="bgmusic" loop>
+  <source src="Cigarettes_After_S_-_Sweet_Instr_getmp3.pro_.mp3" type="audio/mpeg">
+</audio>
+
+<audio id="clapSound">
+  <source src="sound-effect-happy-birthday-music-box-333245.mp3" type="audio/mpeg">
+</audio>
+
+<button class="music-btn" id="musicBtn" onclick="playMusic(this)">🎶 Play Music</button>
+
+<div class="name-entry" id="nameEntry">
+  <h1>What's your name?</h1>
+  <input type="text" id="nameInput" placeholder="Enter your name..." />
+  <br />
+  <button onclick="revealBirthday()">💖 Submit</button>
+</div>
+
+<div class="celebration" id="celebration">
+  <div class="birthday-message" id="birthdayMessage"></div>
+  <div class="beautiful-message" id="beautifulMessage"></div>
+  <div class="second-quote" id="secondQuote">No matter what, I will always be by your side.</div>
+  <div class="candle-btn" id="candleBtn" onclick="blowCandle()">🕯️ Blow Candle</div>
+  <button class="gift-btn" id="giftBtn" onclick="showEnvelope()">🎁 Open Gift</button>
+  <img src="ChatGPT Image Jun 14, 2025, 09_41_26 PM.png" id="specialImage" class="interactive-image" />
+</div>
+
+<div id="overlay" class="overlay">
+  <div class="overlay-content">
+    <img src="ChatGPT Image Jun 17, 2025, 08_28_09 PM.png" alt="Greeting Diary" />
+    <button class="close-btn" onclick="closeOverlay()">✖ Close</button>
+    <button id="miniGamesBtn" class="mini-games-button">🎮 MiniGames</button>
+
+  <div id="gameContainer" class="game-container hidden">
+    <button id="closeGameBtn" class="close-game hidden">✖</button>
+    <div id="gameArea"></div>
+  </div>
+</div>
+  </div>
+</div>
+
+<script>
+  let avoidCursor = true;
+  let giftCaught = false;
+  let giftMotionX = 0;
+  let giftMotionY = 0;
+  let currentName = "";
+  let isLyka = false;
+
+  function playMusic(btn) {
+    const music = document.getElementById('bgmusic');
+    music.volume = 0.3;
+    music.playbackRate = 1.2
+    music.play();
+    btn.style.display = 'none';
+  }
+
+  function capitalizeFirstLetter(str) {
+    return str
+      .split(' ')
+      .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+      .join(' ');
+  }
+
+  function revealBirthday() {
+    let name = document.getElementById("nameInput").value.trim();
+    if (!name) return;
+
+    currentName = capitalizeFirstLetter(name);
+    const normalized = name.trim().toLowerCase();
+    isLyka = ["lyka", "richel", "lyka richel"].includes(normalized);
+
+    document.body.className = "bg2";
+    document.getElementById("birthdayMessage").innerText = isLyka
+      ? `🎉 Happy Birthday, ${currentName} (Avocadie)! 🎉`
+      : `🎉 Happy Birthday, ${currentName}! 🎉`;
+
+    document.getElementById("beautifulMessage").innerText = isLyka
+      ? "You are beautiful, but when you smile, even angels can't compete."
+      : "";
+
+    document.getElementById("nameEntry").style.display = 'none';
+    document.getElementById("celebration").style.display = 'block';
+    document.getElementById("candleBtn").style.display = 'block';
+    document.getElementById("musicBtn").style.display = 'none';
+  }
+
+  document.getElementById("nameInput").addEventListener("keydown", function(e) {
+    if (e.key === "Enter") revealBirthday();
+  });
+
+  function blowCandle() {
+    document.getElementById("candleBtn").style.display = 'none';
+    document.getElementById("giftBtn").style.display = 'block';
+    document.body.className = "bg3";
+
+    const clap = document.getElementById("clapSound");
+    clap.volume = 0.1;
+    clap.playbackRate = 1.2;
+    clap.play();
+
+    alert("🎮 It's game time!\nCatch the gift within 10 seconds!");
+
+    giftCaught = false;
+    avoidCursor = true;
+    const giftBtn = document.getElementById("giftBtn");
+    giftBtn.dataset.left = "50";
+    giftBtn.dataset.top = "70";
+
+    startRandomGiftMotion();
+
+    setTimeout(() => {
+      if (!giftCaught) {
+        alert("😢 Looks like you lose. I'll make it easier.");
+        avoidCursor = false;
+      }
+    }, 9000);
+  }
+
+  function showEnvelope() {
+    giftCaught = true;
+    document.getElementById("giftBtn").style.display = "none";
+    if (isLyka) {
+      document.getElementById("specialImage").style.display = "block";
+      alert("🎉 Congrats! You won!\nTap the envelope to open it.");
+    }
+  }
+
+  function closeOverlay() {
+    document.getElementById("overlay").style.display = "none";
+  }
+
+  function startRandomGiftMotion() {
+    const giftBtn = document.getElementById("giftBtn");
+    giftMotionX = (Math.random() - 0.5) * 1.5;
+    giftMotionY = (Math.random() - 0.5) * 1.5;
+
+    function move() {
+      if (!giftBtn || giftBtn.style.display !== 'block' || giftCaught) return;
+      if (!avoidCursor) return;
+
+      let left = parseFloat(giftBtn.dataset.left || 50);
+      let top = parseFloat(giftBtn.dataset.top || 70);
+      left += giftMotionX;
+      top += giftMotionY;
+
+      if (left > 100) left = 0;
+      if (left < 0) left = 100;
+      if (top > 100) top = 0;
+      if (top < 0) top = 100;
+
+      giftBtn.style.left = `${left}%`;
+      giftBtn.style.top = `${top}%`;
+      giftBtn.dataset.left = left;
+      giftBtn.dataset.top = top;
+
+      if (Math.random() < 0.03) {
+        giftMotionX = (Math.random() - 0.5) * 1.5;
+        giftMotionY = (Math.random() - 0.5) * 1.5;
+      }
+
+      requestAnimationFrame(move);
+    }
+
+    requestAnimationFrame(move);
+  }
+
+  document.getElementById("specialImage").addEventListener("click", function () {
+    document.getElementById("overlay").style.display = "flex";
+  });
+const games = [
+    () => startBalloonPop(),
+    () => startCatchTheHeart(),
+    () => startPuzzleGame(),
+    () => startMemoryMatch()
+  ];
+
+  document.getElementById("miniGamesBtn").addEventListener("click", () => {
+  const randomIndex = Math.floor(Math.random() * games.length);
+  document.getElementById("gameContainer").classList.remove("hidden");
+  document.getElementById("closeGameBtn").classList.remove("hidden");
+  games[randomIndex]();
+});
+
+document.getElementById("closeGameBtn").addEventListener("click", () => {
+  document.getElementById("gameContainer").classList.add("hidden");
+  document.getElementById("closeGameBtn").classList.add("hidden");
+  document.getElementById("gameArea").innerHTML = '';
+});
+
+ function startBalloonPop() {
+  document.getElementById("gameArea").innerHTML = `
+    <h2>🎈 Balloon Pop Mini-Game</h2>
+    <p>Pop as many balloons as you can in 10 seconds!</p>
+    <div id="balloonGameInfo" style="margin-bottom:10px;">
+      ⏱ Time Left: <span id="balloonTimer">10</span>s | 🎯 Score: <span id="balloonScore">0</span>
+    </div>
+    <div id="balloonGameArea" style="position:relative; width:100%; height:300px; overflow:hidden; border:1px solid #ccc; border-radius:10px;"></div>
+  `;
+
+  const gameArea = document.getElementById("balloonGameArea");
+  const scoreDisplay = document.getElementById("balloonScore");
+  const timerDisplay = document.getElementById("balloonTimer");
+
+  let score = 0;
+  let timeLeft = 10;
+  let gameInterval;
+  let balloonInterval;
+
+  // Generate a balloon
+  function createBalloon() {
+    const balloon = document.createElement("div");
+    balloon.classList.add("balloon-pop-balloon");
+
+    const size = 60;
+    const areaWidth = gameArea.offsetWidth;
+    const left = Math.random() * (areaWidth - size);
+
+    balloon.style.left = `${left}px`;
+    balloon.style.bottom = `0px`;
+
+    balloon.addEventListener("click", () => {
+      score++;
+      scoreDisplay.textContent = score;
+      balloon.remove();
+    });
+
+    gameArea.appendChild(balloon);
+
+    // Remove balloon after it floats up
+    setTimeout(() => {
+      balloon.remove();
+    }, 4000);
+  }
+
+  // Start game
+  gameInterval = setInterval(() => {
+    timeLeft--;
+    timerDisplay.textContent = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(gameInterval);
+      clearInterval(balloonInterval);
+      setTimeout(() => {
+        gameArea.innerHTML = `<h3>⏰ Time's up! You scored ${score} points!</h3>`;
+      }, 200);
+    }
+  }, 1000);
+
+  // Create balloons every 500ms
+  balloonInterval = setInterval(createBalloon, 500);
+}
+
+// Add scoped balloon styles to head (once)
+if (!document.getElementById('balloonPopStyles')) {
+  const style = document.createElement("style");
+  style.id = 'balloonPopStyles';
+  style.textContent = `
+    .balloon-pop-balloon {
+      width: 60px;
+      height: 80px;
+      background: radial-gradient(circle, #ff69b4, #ff1493);
+      border-radius: 50% 50% 50% 50% / 60% 60% 40% 40%;
+      position: absolute;
+      cursor: pointer;
+      animation: balloonPopFloat 4s linear forwards;
+    }
+    @keyframes balloonPopFloat {
+      from { bottom: 0; }
+      to { bottom: 100%; }
+    }
+  `;
+  document.head.appendChild(style);
+}
+
+
+ 
+
+
+ function startCatchTheHeart() {
+  document.getElementById("gameArea").innerHTML = `
+    <h2>💖 Catch the Heart</h2>
+    <p>Move the basket left/right using arrow keys. Catch as many hearts as you can in 10 seconds!</p>
+    <div id="heartGameInfo" style="margin-bottom:10px;">
+      ⏱ Time Left: <span id="heartTimer">10</span>s | ❤️ Score: <span id="heartScore">0</span>
+    </div>
+    <div id="heartGameArea" style="position:relative; width:100%; height:300px; border:1px solid #ccc; border-radius:10px; background: #fff0f5; overflow: hidden;"></div>
+  `;
+
+  const gameArea = document.getElementById("heartGameArea");
+  const scoreDisplay = document.getElementById("heartScore");
+  const timerDisplay = document.getElementById("heartTimer");
+
+  let score = 0;
+  let timeLeft = 10;
+  let heartInterval, gameTimer;
+  const areaWidth = gameArea.offsetWidth;
+
+  // Create basket
+  const basket = document.createElement("div");
+  basket.style.width = "80px";
+  basket.style.height = "40px";
+  basket.style.background = "#ff1493";
+  basket.style.position = "absolute";
+  basket.style.bottom = "0";
+  basket.style.left = "50%";
+  basket.style.transform = "translateX(-50%)";
+  basket.style.borderRadius = "20px";
+  basket.style.textAlign = "center";
+  basket.style.color = "white";
+  basket.textContent = "🧺";
+  gameArea.appendChild(basket);
+
+  let basketX = areaWidth / 2 - 40;
+
+  // Move basket
+  function moveBasket(e) {
+    if (e.key === "ArrowLeft") basketX -= 20;
+    if (e.key === "ArrowRight") basketX += 20;
+
+    basketX = Math.max(0, Math.min(areaWidth - 80, basketX));
+    basket.style.left = `${basketX}px`;
+  }
+
+  document.addEventListener("keydown", moveBasket);
+
+  // Create falling heart
+  function createHeart() {
+    const heart = document.createElement("div");
+    heart.textContent = "💖";
+    heart.style.position = "absolute";
+    heart.style.left = `${Math.random() * (areaWidth - 30)}px`;
+    heart.style.top = "0px";
+    heart.style.fontSize = "24px";
+    heart.style.transition = "top 0.05s linear";
+
+    gameArea.appendChild(heart);
+
+    let top = 0;
+    const fall = setInterval(() => {
+      top += 4;
+      heart.style.top = `${top}px`;
+
+      const heartRect = heart.getBoundingClientRect();
+      const basketRect = basket.getBoundingClientRect();
+
+      if (
+        heartRect.bottom >= basketRect.top &&
+        heartRect.left < basketRect.right &&
+        heartRect.right > basketRect.left
+      ) {
+        score++;
+        scoreDisplay.textContent = score;
+        heart.remove();
+        clearInterval(fall);
+      }
+
+      if (top > 300) {
+        heart.remove();
+        clearInterval(fall);
+      }
+    }, 20);
+  }
+
+  // Game timer
+  gameTimer = setInterval(() => {
+    timeLeft--;
+    timerDisplay.textContent = timeLeft;
+    if (timeLeft <= 0) {
+      clearInterval(gameTimer);
+      clearInterval(heartInterval);
+      document.removeEventListener("keydown", moveBasket);
+      setTimeout(() => {
+        gameArea.innerHTML = `<h3>🎉 Time's up! You caught ${score} hearts!</h3>`;
+      }, 200);
+    }
+  }, 1000);
+
+  // Start dropping hearts
+  heartInterval = setInterval(createHeart, 700);
+}
+
+
+
+  function startPuzzleGame() {
+  document.getElementById("gameArea").innerHTML = `
+    <style>
+      .puzzle-container {
+        display: grid;
+        grid-template-columns: repeat(3, 80px);
+        grid-gap: 5px;
+        justify-content: center;
+        margin-top: 10px;
+      }
+
+      .tile {
+        width: 80px;
+        height: 80px;
+        font-size: 24px;
+        font-weight: bold;
+        background-color: #b3e5fc;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        cursor: pointer;
+        border-radius: 8px;
+        user-select: none;
+      }
+
+      .empty {
+        background-color: #e0e0e0;
+        cursor: default;
+      }
+
+      .puzzle-title {
+        text-align: center;
+        font-size: 18px;
+        font-weight: bold;
+        margin-bottom: 10px;
+        color: #4a148c;
+      }
+    </style>
+
+    <div class="puzzle-title">🧩 Slide Puzzle - Arrange numbers 1 to 8</div>
+    <div class="puzzle-container" id="puzzleGrid"></div>
+  `;
+
+  const grid = document.getElementById("puzzleGrid");
+  let tiles = [...Array(8).keys()].map(x => x + 1).concat(null); // [1...8,null]
+  shuffle(tiles);
+
+  function renderGrid() {
+    grid.innerHTML = "";
+    tiles.forEach((val, i) => {
+      const tile = document.createElement("div");
+      tile.className = "tile" + (val === null ? " empty" : "");
+      tile.innerText = val || "";
+      tile.addEventListener("click", () => tryMove(i));
+      grid.appendChild(tile);
+    });
+  }
+
+  function tryMove(index) {
+    const emptyIndex = tiles.indexOf(null);
+    const validMoves = [index - 1, index + 1, index - 3, index + 3];
+    if (validMoves.includes(emptyIndex) && isAdjacent(index, emptyIndex)) {
+      [tiles[index], tiles[emptyIndex]] = [tiles[emptyIndex], tiles[index]];
+      renderGrid();
+      if (isSolved()) {
+        setTimeout(() => alert("🎉 Puzzle Solved!"), 200);
+      }
+    }
+  }
+
+  function isAdjacent(i, j) {
+    const rowI = Math.floor(i / 3), colI = i % 3;
+    const rowJ = Math.floor(j / 3), colJ = j % 3;
+    return (Math.abs(rowI - rowJ) + Math.abs(colI - colJ)) === 1;
+  }
+
+  function isSolved() {
+    return tiles.slice(0, 8).every((v, i) => v === i + 1);
+  }
+
+  function shuffle(arr) {
+    for (let i = arr.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    if (isSolved()) shuffle(arr); // avoid solved on first render
+  }
+
+  renderGrid();
+}
+
+
+  function startMemoryMatch() {
+  document.getElementById("gameArea").innerHTML = `
+    <style>
+      .memory-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 80px);
+        gap: 15px;
+        justify-content: center;
+        margin-top: 10px;
+      }
+
+      .memory-card {
+        width: 80px;
+        height: 80px;
+        background-color: #ffb6c1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 30px;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: background-color 0.3s;
+        user-select: none;
+      }
+
+      .memory-card.matched {
+        background-color: #98fb98;
+        cursor: default;
+      }
+
+      .memory-card.revealed {
+        background-color: #fff0f5;
+      }
+
+      .memory-title {
+        font-size: 18px;
+        color: #d63384;
+        margin-bottom: 10px;
+        font-weight: bold;
+      }
+
+      .match-result {
+        margin-top: 10px;
+        font-weight: bold;
+        color: #cc0066;
+      }
+    </style>
+
+    <div class="memory-title">🧠 Memory Match - Find all the pairs!</div>
+    <div class="memory-grid" id="memoryGrid"></div>
+    <div class="match-result" id="matchResult"></div>
+  `;
+
+  const emojis = ["🍓", "🍓", "🍕", "🍕", "🌸", "🌸", "🎈", "🎈", "🐶", "🐶", "🍩", "🍩", "🎁", "🎁", "💖", "💖"];
+  const shuffled = emojis.sort(() => 0.5 - Math.random());
+  const grid = document.getElementById("memoryGrid");
+  const result = document.getElementById("matchResult");
+  let first = null;
+  let second = null;
+  let lock = false;
+  let matches = 0;
+
+  shuffled.forEach((emoji, index) => {
+    const card = document.createElement("div");
+    card.classList.add("memory-card");
+    card.dataset.emoji = emoji;
+    card.dataset.index = index;
+
+    card.addEventListener("click", () => {
+      if (lock || card.classList.contains("matched") || card === first) return;
+
+      card.textContent = emoji;
+      card.classList.add("revealed");
+
+      if (!first) {
+        first = card;
+      } else {
+        second = card;
+        lock = true;
+
+        if (first.dataset.emoji === second.dataset.emoji) {
+          first.classList.add("matched");
+          second.classList.add("matched");
+          matches++;
+          if (matches === emojis.length / 2) {
+            result.textContent = "🎉 You matched all pairs!";
+          }
+          resetTurn();
+        } else {
+          setTimeout(() => {
+            first.textContent = "";
+            second.textContent = "";
+            first.classList.remove("revealed");
+            second.classList.remove("revealed");
+            resetTurn();
+          }, 800);
+        }
+      }
+    });
+
+    grid.appendChild(card);
+  });
+
+  function resetTurn() {
+    first = null;
+    second = null;
+    lock = false;
+  }
+}
+
+</script>
+</script>
+
+</body>
+</html>
